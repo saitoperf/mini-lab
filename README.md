@@ -3,12 +3,24 @@
 4 ノードでクラスタを構築します。<br>
 各ノードは物理マシンでも，仮想マシンでも可能
 
+
+## リポジトリ構成
+- src
+    - ソースコード置き場
+    - 主にansible
+- memo
+    - サーバ構築のメモ
+- plan.md
+    - 作業計画
+- install.sh
+    - インストーラ
+
 ## 仕様書
 ### サーバ
 - ノード 1： (hack11)
     - **外部からのエントリポイント**
     - 踏み台サーバ
-    - 192.168.122.11/24
+    - 133.15.45.42/25
     - ansible
         - ターゲットノード
     - 主にルーティングの設定
@@ -16,7 +28,7 @@
         - `ssh hack12`では入れない
 - ノード 2： (hack12)
     - **ストレージサーバ**
-    - 192.168.122.12/24
+    - 133.15.45.43/25
     - ansible
         - コントロールノード
     - k8s 
@@ -25,7 +37,7 @@
         - サーバ
 - ノード 3： (hack21)
     - **計算ノード**
-    - 192.168.122.13/24
+    - 133.15.45.45/25
     - ansible 
         - ターゲット
     - k8s 
@@ -34,7 +46,7 @@
         - クライアント
 - ノード4： (hack22)
     - **計算ノード**
-    - 192.168.122.14/24
+    - 133.15.45.46/25
     - ansible 
         - ターゲット
     - k8s 
@@ -42,7 +54,7 @@
     - LDAP，NFS
         - クライアント
 
-## ユーザ
+### LDAPユーザ
 - admin
     - home: /home/admin
     - group: admin, sudo
@@ -59,46 +71,13 @@
 ## Quick Start
 - 各ノードにpython3をインストールしてください
 ```sh
-# node2
+# hack12
 sudo apt install -y python3
 sudo ln -s /usr/bin/python3 /usr/bin/python
 ```
 
 ```sh
-git clone <this repo>
+git clone https://github.com/saitoperf/virt-lab.git
 cd virt-lab
 ./install.sh
-```
-```sh
-# node2
-ssy-keygen
-# node1
-scp ssh.sh id_rsa.pub 192.168.122.11:$HOME/
-ssh 192.168.122.11 $HOME/ssh.sh
-# node3
-scp ssh.sh id_rsa.pub 192.168.122.13:$HOME/
-ssh 192.168.122.13 $HOME/ssh.sh
-# node4
-scp ssh.sh id_rsa.pub 192.168.122.14:$HOME/
-ssh 192.168.122.14 $HOME/ssh.sh
-```
-
-
-## メモ
-### ansibleのインストール (pip ver)
-```sh
-sudo apt install -y python3-virtualenv python3-pip
-# 仮想環境の作成
-virtualenv virenv
-# 有効化
-source virenv/bin/activate
-# 無効化
-deactivate
-# 仮想環境にansibleをインストール
-source virenv/bin/activate
-pip3 install ansible==2.9.6
-```
-
-```sh
-
 ```
