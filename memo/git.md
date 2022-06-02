@@ -70,3 +70,9 @@ git init --initial-branch main
 ## その前にcommit する必要あり
 git branch --move master main
 ```
+ブランチの削除
+```sh
+git branch -d <branch name>
+# 強制削除
+git branch -D <branch name>
+```
