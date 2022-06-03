@@ -1,0 +1,14 @@
+---
+- hosts: server  
+  vars:
+  tasks:
+  - name: install LDAP and slapd
+  - name: configure slapd
+  - name: install sssd
+  - name: configure sssd
+  - name: install NFS
+  - name: configure NFS
+  handler:
+
+---
+- hosts: calculator

@@ -1,0 +1,10 @@
+---
+- hosts: all_nodes
+  tasks:
+  - name: add ansible user
+    user:
+      user: ansible
+      groups: sudo
+      append: yes
+
+# ap -i inv.ini -bK play.yml 
