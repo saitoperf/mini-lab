@@ -1,4 +1,4 @@
-# Virtual-laboratory
+# mini-lab
 ローカルのマシンに仮想の研究室サーバクラスタを構築します。<br>
 4 ノードでクラスタを構築します。<br>
 各ノードは物理マシンでも，仮想マシンでも可能
@@ -30,7 +30,7 @@
     - **ストレージサーバ**
     - 133.15.45.43/25
     - ansible
-        - コントロールノード
+        - ターゲットノード
     - k8s 
         - マスタ
     - LDAP，samba，NFS
@@ -58,15 +58,15 @@
 - admin
     - home: /home/admin
     - group: admin, sudo
-    - pass: adminpass
+    - pass: pass
 - user1
-    - home: /home/user1
-    - group: user1
-    - user1pass
+    - home: /home/user01
+    - group: user01
+    - user01
 - user2
-    - home: /home/user2
-    - group: user2
-    - user2pass
+    - home: /home/user02
+    - group: user02
+    - user02
 
 ## Quick Start
 - 各ノードにpython3をインストールしてください
