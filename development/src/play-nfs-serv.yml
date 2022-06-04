@@ -1,6 +1,8 @@
 ---
 # サーバ (hack12)
-- hosts: server
+- hosts: serv
+  gather_facts: true
+  remote_user: "{{ user }}"
   vars_files:
   - vars.yml
 
@@ -17,9 +19,7 @@
     copy:
       src: nfs/exports
       dest: /etc/exports
-    notify: export file-system
-  - name:
-    shell: mount ldap01.example.com:/home /home
-  handlers:
+    # notify: export file-system
+  # handlers:
   - name: export file-system
     command: exportfs -a

@@ -1,7 +1,8 @@
 ---
 # サーバ (hack12)
-- hosts: server
-  
+- hosts: serv
+  gather_facts: true
+  remote_user: "{{ user }}"
   vars_files:
   - vars.yml
 

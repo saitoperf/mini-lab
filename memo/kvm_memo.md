@@ -1,5 +1,31 @@
 # kvmのメモ
 
+
+## hackson
+```sh
+sudo virt-install \
+    --name node092 \
+    --os-variant ubuntu20.04 \
+    --vcpus 4 \
+    --ram 8192 \
+    --disk size=50 \
+    --location http://ftp.ubuntu.com/ubuntu/dists/focal/main/installer-amd64/ \
+    --network bridge=virbr0,model=virtio \
+    --graphics none \
+    --extra-args='console=ttyS0,115200n8 serial'
+
+sudo virt-install \
+    --name node093 \
+    --os-variant ubuntu20.04 \
+    --vcpus 4 \
+    --ram 8192 \
+    --disk size=50 \
+    --location http://ftp.ubuntu.com/ubuntu/dists/focal/main/installer-amd64/ \
+    --network bridge=virbr0,model=virtio \
+    --graphics none \
+    --extra-args='console=ttyS0,115200n8 serial'
+```
+
 ## k8sクラスタ用のVM(0406~)
 **imp10**
 ```sh

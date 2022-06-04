@@ -1,6 +1,8 @@
 ---
 # サーバ (hack12)
 - hosts: calc
+  gather_facts: true
+  remote_user: "{{ user }}"
   vars_files:
   - vars.yml
 
@@ -14,7 +16,8 @@
       state: latest
 
   # 設定ファイルの適用
-  # sssd
+  - name: add hots
+    shell: echo 192.168.122.12 ldap01.example.com >> /etc/hosts
   - name: configure sssd
     copy:
       src: sssd/sssd.conf

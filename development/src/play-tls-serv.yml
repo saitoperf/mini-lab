@@ -1,6 +1,8 @@
 ---
 # サーバ (hack12)
-- hosts: server
+- hosts: serv
+  gather_facts: true
+  remote_user: "{{ user }}"
   vars_files:
   - vars.yml
 
@@ -42,7 +44,15 @@
   - name: certtool generate-self-signed
     shell: certtool --generate-privkey --bits 4096 --outfile /etc/ssl/private/mycakey.pem && certtool --generate-self-signed --load-privkey /etc/ssl/private/mycakey.pem --template /etc/ssl/ca.info --outfile /usr/local/share/ca-certificates/mycacert.crt && update-ca-certificates && certtool --generate-privkey --bits 2048 --outfile /etc/ldap/ldap01_slapd_key.pem
   - name: create servers certificate
-    shell: certtool --generate-certificate --load-privkey /etc/ldap/ldap01_slapd_key.pem --load-ca-certificate /etc/ssl/certs/mycacert.pem --load-ca-privkey /etc/ssl/private/mycakey.pem --template /etc/ssl/ldap01.info --outfile /etc/ldap/ldap01_slapd_cert.pem && chgrp openldap /etc/ldap/ldap01_slapd_key.pem && chmod 0640 /etc/ldap/ldap01_slapd_key.pem
+    shell: certtool --generate-certificate --load-privkey /etc/ldap/ldap01_slapd_key.pem --load-ca-certificate /etc/ssl/certs/mycacert.pem --load-ca-privkey /etc/ssl/private/mycakey.pem --template /etc/ssl/ldap01.info --outfile /etc/ldap/ldap01_slapd_cert.pem
+  - name: change groups
+    file: 
+      path: /etc/ldap/ldap01_slapd_key.pem
+      group: openldap 
+  - name: change module
+    file:
+      path: /etc/ldap/ldap01_slapd_key.pem
+      mode: '0640'
   - name: ldapmodify
     shell: ldapmodify -Y EXTERNAL -H ldapi:/// -f /home/{{ user }}/certinfo.ldif
     ignore_errors: true

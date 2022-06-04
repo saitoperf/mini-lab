@@ -1,19 +1,19 @@
 #!/bin/bash
 
 func(){
-    # copy public-key
-    ssh ${USR}@$1 mkdir ${HOME}/.ssh
+    echo 'copy public-key'
+    ssh ${USR}@$1 mkdir /home/${USR}/.ssh
     scp ${HOME}/.ssh/id_rsa.pub ${USR}@$1:/home/${USR}/.ssh
 
-    # rename public-key to authorized_keys
-    ssh ${USR}@$1 mv ${HOME}/.ssh/id_rsa.pub ${HOME}/.ssh/authorized_keys
+    echo 'rename public-key to authorized_keys'
+    ssh ${USR}@$1 mv /home/${USR}/.ssh/id_rsa.pub /home/${USR}/.ssh/authorized_keys
     
-    # chmod dir and file
-    ssh ${USR}@$1 chmod 700 ${HOME}/.ssh
-    ssh ${USR}@$1 chmod 600 ${HOME}/.ssh/authorized_keys
+    echo 'chmod dir and file'
+    ssh ${USR}@$1 chmod 700 /home/${USR}/.ssh
+    ssh ${USR}@$1 chmod 600 /home/${USR}/.ssh/authorized_keys
 }
 
-if [ ! -e ${HOME}/.ssh/id_rsa || ! -e ${HOME}/.ssh/id_rsa.pub ]; then
+if [ ! -e ${HOME}/.ssh/id_rsa ] || [ ! -e ${HOME}/.ssh/id_rsa.pub ]; then
     rm ${HOME}/.ssh/id_rsa.pub ${HOME}/.ssh/id_rsa
     ssh-keygen
     # コントロールノードに手元のマシンの公開鍵を入れておくと
@@ -24,6 +24,8 @@ fi
 # Change your node's account
 USR="saito"
 # Change your node's IP
+## node090
+func 192.168.122.11
 ## node091
 func 192.168.122.12
 ## node100

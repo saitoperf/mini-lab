@@ -1,6 +1,8 @@
 ---
 # サーバ (hack12)
 - hosts: calc
+  gather_facts: true
+  remote_user: "{{ user }}"
   vars_files:
   - vars.yml
 
@@ -10,7 +12,9 @@
     apt:
       name: nfs-common
       state: latest
-  - name: add hots
-    shell: echo 192.168.122.12 ldap01.example.com >> /etc/hosts
   - name: mount
-    shell: mount ldap01.example.com:/home /home
+    mount:
+      src: ldap01.example.com:/home
+      path: /home
+      fstype: nfs
+      state: mounted

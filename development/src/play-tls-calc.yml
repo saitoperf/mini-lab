@@ -2,6 +2,10 @@
 # 計算ノード (hack21, hack22)
 # 公開鍵のコピー
 - hosts: calc
+  gather_facts: true
+  remote_user: "{{ user }}"
+  vars_files:
+  - vars.yml
   tasks:
   - name: copy crt
     copy:

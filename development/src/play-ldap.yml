@@ -1,6 +1,8 @@
 ---
 # サーバ (hack12)
-- hosts: server
+- hosts: serv
+  gather_facts: true
+  remote_user: "{{ user }}"
   vars_files:
   - vars.yml
 
@@ -10,7 +12,10 @@
     apt:
       name: slapd
       state: latest
-    notify: init configure slapd
+    # notify: init configure slapd
+  # handlers:
+  - name: init configure slapd
+    shell: echo "slapd slapd/no_configuration boolean false" | debconf-set-selections && echo "slapd slapd/domain string example.com" | debconf-set-selections && echo "slapd shared/organization string 'admin'" | debconf-set-selections && echo "slapd slapd/password1 password pass" | debconf-set-selections && echo "slapd slapd/password2 password pass" | debconf-set-selections && echo "slapd slapd/purge_database boolean true" | debconf-set-selections && echo "slapd slapd/move_old_database boolean true" | debconf-set-selections && dpkg-reconfigure -f noninteractive slapd
   - name: install LDAP
     apt:
       name: ldap-utils
@@ -38,20 +43,19 @@
       dest: /home/{{ user }}/user.ldif
     # notify: ldapadd user
 
-  # サービスの再起動
+  # 設定を更新
+  - name: add hots
+    shell: echo 192.168.122.12 ldap01.example.com >> /etc/hosts
   - name: ldapadd init
-    shell: ldapadd -x -D cn=admin,dc=example,dc=com -w pass -f /home/{{ user }}/init.ldif
+    command: ldapadd -x -D cn=admin,dc=example,dc=com -w pass -f /home/{{ user }}/init.ldif
     ignore_errors: true
   - name: ldapadd group
-    shell: ldapadd -x -D cn=admin,dc=example,dc=com -w pass -f /home/{{ user }}/group.ldif
+    command: ldapadd -x -D cn=admin,dc=example,dc=com -w pass -f /home/{{ user }}/group.ldif
     ignore_errors: true
   - name: ldapadd user
-    shell: ldapadd -x -D cn=admin,dc=example,dc=com -w pass -f /home/{{ user }}/user.ldif
+    command: ldapadd -x -D cn=admin,dc=example,dc=com -w pass -f /home/{{ user }}/user.ldif
     ignore_errors: true
   # LDAPの最初の設定 (対話になるので、予めdebconf-set-selectionsに入れておく)
-  handlers:
-  - name: init configure slapd
-    shell: echo "slapd slapd/no_configuration boolean false" | debconf-set-selections && echo "slapd slapd/domain string example.com" | debconf-set-selections && echo "slapd shared/organization string 'admin'" | debconf-set-selections && echo "slapd slapd/password1 password pass" | debconf-set-selections && echo "slapd slapd/password2 password pass" | debconf-set-selections && echo "slapd slapd/purge_database boolean true" | debconf-set-selections && echo "slapd slapd/move_old_database boolean true" | debconf-set-selections && dpkg-reconfigure -f noninteractive slapd
 
 # ---
 # 計算ノード (hack21, hack22)
