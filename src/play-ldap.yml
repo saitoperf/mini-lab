@@ -1,0 +1,47 @@
+---
+# サーバ (hack12)
+- hosts: serv
+  gather_facts: true
+  remote_user: "{{ user }}"
+  vars_files:
+  - vars.yml
+
+  tasks:
+  # 各サービスのインストール
+  - name: install slapd
+    apt:
+      name: slapd
+      state: latest
+  - name: init configure slapd
+    # LDAPの最初の設定 (対話になるので、予めdebconf-set-selectionsに入れておく)
+    shell: echo "slapd slapd/no_configuration boolean false" | debconf-set-selections && echo "slapd slapd/domain string example.com" | debconf-set-selections && echo "slapd shared/organization string 'admin'" | debconf-set-selections && echo "slapd slapd/password1 password pass" | debconf-set-selections && echo "slapd slapd/password2 password pass" | debconf-set-selections && echo "slapd slapd/purge_database boolean true" | debconf-set-selections && echo "slapd slapd/move_old_database boolean true" | debconf-set-selections && dpkg-reconfigure -f noninteractive slapd
+  - name: install LDAP
+    apt:
+      name: ldap-utils
+      state: latest
+
+  # 設定ファイルの適用
+  # LDAP
+  - name: copy ldap.conf
+    copy:
+      src: ldap/ldap.conf
+      dest: /etc/ldap/ldap.conf
+  - name: copy ldif files
+    copy:
+      src: "{{ item }}"
+      dest: /home/{{ user }}
+    with_fileglob:
+    - "ldap/*.ldif"
+
+  # 設定を更新
+  - name: add hots
+    shell: echo {{ serverip }} ldap01.example.com >> /etc/hosts
+  - name: ldapadd init
+    command: ldapadd -x -D cn=admin,dc=example,dc=com -w pass -f init.ldif
+    ignore_errors: true
+  - name: ldapadd group
+    command: ldapadd -x -D cn=admin,dc=example,dc=com -w pass -f group.ldif
+    ignore_errors: true
+  - name: ldapadd user
+    command: ldapadd -x -D cn=admin,dc=example,dc=com -w pass -f user.ldif
+    ignore_errors: true

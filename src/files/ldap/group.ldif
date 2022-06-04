@@ -1,4 +1,3 @@
-#  group.ldif
 dn: cn=system01,ou=Group,dc=example,dc=com
 objectClass: posixGroup
 objectClass: top

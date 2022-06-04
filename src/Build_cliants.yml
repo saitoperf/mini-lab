@@ -1,9 +1,0 @@
----
-- name: Starting SSSD service on cliants
-  import_playbook: Starting_SSSD_cliant.yml
-
-- name: Build TLS
-  import_playbook: Build_TLS_cliant.yml
-
-- name: Mount NFS
-  import_playbook: Mount_NFS_cliant.yml

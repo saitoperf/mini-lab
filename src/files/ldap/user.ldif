@@ -1,4 +1,3 @@
-# user.ldif
 dn: uid=user01,ou=People,dc=example,dc=com
 uid: user01
 cn: Test User 01
