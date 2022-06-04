@@ -7,8 +7,7 @@
       state: directory
       owner: ansible
       mode: 0755
-
-  - name: copy file
+  - name: copy hosts file 
     copy:
       src: /etc/hosts
       dest: /home/ansible/tmp/hosts

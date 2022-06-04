@@ -1,0 +1,31 @@
+---
+# サーバ (hack12)
+- hosts: calc
+  vars_files:
+  - vars.yml
+
+  tasks:
+  # 各サービスのインストール
+  - name: install sssd
+    apt:
+      name: 
+      - sssd-ldap
+      - ldap-utils
+      state: latest
+
+  # 設定ファイルの適用
+  # sssd
+  - name: configure sssd
+    copy:
+      src: sssd/sssd.conf
+      dest: /etc/sssd/sssd.conf
+  - name: 
+    file: 
+      path: /etc/sssd/sssd.conf
+      mode: '0600'
+  - name: restart sssd
+    service:
+      name: sssd
+      state: restarted
+  - name: auto make home dir
+    shell: pam-auth-update --enable mkhomedir

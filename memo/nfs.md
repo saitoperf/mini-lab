@@ -33,3 +33,9 @@ sudo showmount -a
 sudo showmount -e
 sudo showmount -d
 ```
+
+busy
+```sh
+sudo umount -l /home
+sudo fuser -k /home
+```

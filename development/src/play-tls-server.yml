@@ -1,0 +1,54 @@
+---
+# サーバ (hack12)
+- hosts: server
+  vars_files:
+  - vars.yml
+
+  tasks:
+  # 各サービスのインストール
+  - name: install TLS
+    apt:
+      name:
+      - gnutls-bin
+      - ssl-cert
+      state: latest
+
+  # 設定ファイルの適用
+  # TLS
+  - name: copy ca.info
+    copy:
+      src: tls/ca.info
+      dest: /etc/ssl/ca.info
+    # notify: certtool generate-self-signed
+  
+  - name: copy ldap01.info
+    copy:
+      src: tls/ldap01.info
+      dest: /etc/ssl/ldap01.info
+    # notify: create servers certificate
+
+  - name: copy certinfo.ldif
+    copy:
+      src: tls/certinfo.ldif
+      dest: /home/{{ user }}/
+    # notify: ldapmodify
+    
+  - name: copy slapd
+    copy:
+      src: tls/slapd
+      dest: /etc/default/slapd
+
+  # handlers:
+  - name: certtool generate-self-signed
+    shell: certtool --generate-privkey --bits 4096 --outfile /etc/ssl/private/mycakey.pem && certtool --generate-self-signed --load-privkey /etc/ssl/private/mycakey.pem --template /etc/ssl/ca.info --outfile /usr/local/share/ca-certificates/mycacert.crt && update-ca-certificates && certtool --generate-privkey --bits 2048 --outfile /etc/ldap/ldap01_slapd_key.pem
+  - name: create servers certificate
+    shell: certtool --generate-certificate --load-privkey /etc/ldap/ldap01_slapd_key.pem --load-ca-certificate /etc/ssl/certs/mycacert.pem --load-ca-privkey /etc/ssl/private/mycakey.pem --template /etc/ssl/ldap01.info --outfile /etc/ldap/ldap01_slapd_cert.pem && chgrp openldap /etc/ldap/ldap01_slapd_key.pem && chmod 0640 /etc/ldap/ldap01_slapd_key.pem
+  - name: ldapmodify
+    shell: ldapmodify -Y EXTERNAL -H ldapi:/// -f /home/{{ user }}/certinfo.ldif
+    ignore_errors: true
+
+  - name: fetch crt
+    fetch:
+      src: /usr/local/share/ca-certificates/mycacert.crt
+      dest: files/tls/mycacert.crt
+      flat: true

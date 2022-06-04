@@ -1,6 +1,16 @@
 # ansible
 - [Ansible日本語ドキュメント](https://docs.ansible.com/ansible/2.9_ja/index.html)
 - [Ansibleドキュメント](https://docs.ansible.com/ansible/latest/index.html)
+
+## 対話型
+- dpkg-reconfigure で対話になる問題
+- 解決策
+    - https://github.com/nonlinear-vegan/slapd/blob/master/Dockerfile
+    - shellモジュールを使ってワンライナーで書く
+```yaml
+    shell: sudo echo "slapd slapd/no_configuration boolean false" | sudo debconf-set-selections && sudo echo "slapd slapd/domain string example.com" | sudo debconf-set-selections && sudo echo "slapd shared/organization string 'admin'" | sudo debconf-set-selections && sudo echo "slapd slapd/password1 password pass" | sudo debconf-set-selections && sudo echo "slapd slapd/password2 password pass" | sudo debconf-set-selections && sudo echo "slapd slapd/purge_database boolean true" | sudo debconf-set-selections && sudo echo "slapd slapd/move_old_database boolean true" | sudo debconf-set-selections && sudo dpkg-reconfigure -f noninteractive slapd
+```
+
 ## youtubeの動画
 - https://www.youtube.com/watch?v=LKSWE_endX8&list=PL_RwLDGrI9OukEWiXyLWKxy-ccuBReL-o
 ### 1

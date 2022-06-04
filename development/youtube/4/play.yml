@@ -1,4 +1,4 @@
-ls---
+---
 - hosts: servers
   gather_facts: yes
   vars_files:

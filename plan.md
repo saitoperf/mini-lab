@@ -4,7 +4,6 @@
 - Virtual-laboratory (仮想研究室)
 - virt-lab (仮想研究室)
 - MiniLab (小さな研究室)
-- 
 
 ## 目的
 
