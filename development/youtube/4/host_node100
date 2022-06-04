@@ -1,5 +1,0 @@
-[servers]
-192.168.122.13
-
-[servers:vars]
-environment_name=staging
