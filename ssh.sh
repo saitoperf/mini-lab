@@ -26,6 +26,8 @@ USR="taiki"
 # Change your node's IP
 ## hack11
 func 133.15.45.42
+## hack12
+func 133.15.45.43
 ## hack21
 func 133.15.45.45
 ## hack21

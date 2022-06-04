@@ -1,4 +1,4 @@
-- hosts: hack12
+- hosts: server
   gather_facts: yes
   vars:
     ldap_password: pass
@@ -69,30 +69,3 @@
         command: ldapadd -x -D cn=admin,dc=example,dc=com -W -f ldfi/user.ldif
         responses:
           "Enter LDAP Password:" : "{{ldap_password}}"
-    
-    - name: Installing SSSD
-      apt:
-        name: 
-          - sssd-ldap
-          - ldap-utils
-        state: latest
-
-    - name: Init sssd.conf
-      copy:
-        src: sssd.conf
-        dest: /etc/sssd
-    
-    - name: Authorization to sssd.conf
-      file:
-        path: /etc/sssd/sssd.conf
-        mode: '0600'
-
-    - name: Starting SSSD
-      service:
-        name: sssd
-        state: started
-        enabled: yes
-    
-    - name: Automatically create home directory
-      command: pam-auth-update --enable mkhomedir
-

@@ -1,0 +1,12 @@
+---
+- name: Build LDAP server
+  import_playbook: Build_LDAP.yml
+
+- name: Starting SSSD service on a server
+  import_playbook: Starting_SSSD_server.yml
+
+- name: Build TLS
+  import_playbook: Build_TLS_server.yml
+
+- name: Build NFS
+  import_playbook: Mount_NFS_server.yml

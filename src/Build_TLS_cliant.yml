@@ -1,0 +1,18 @@
+
+---
+# 計算ノード (hack21, hack22)
+# 公開鍵のコピー
+- hosts: calc
+  tasks:
+  - name: copy crt
+    copy:
+      src: tls/mycacert.crt
+      dest: /usr/local/share/ca-certificates/mycacert.crt
+    notify: update-ca-certificates
+  
+  - name: Add hosts
+    shell: echo 133.15.45.43 ldap01.example.com >> /etc/hosts
+  
+  handlers:
+  - name: update-ca-certificates
+    shell: update-ca-certificates

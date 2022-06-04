@@ -52,35 +52,3 @@
       src: /usr/local/share/ca-certificates/mycacert.crt
       dest: files/tls/mycacert.crt
       flat: true
-  
-  - name: Installing NFS server
-    apt:
-      name: nfs-kernel-server
-      state: latest
-  
-  - name: Starting NFS server
-    service:
-      name: nfs-kernel-server
-      state: started
-      enabled: yes
-  
-  - name: copy /etc/exports
-    copy:
-      src: exports
-      dest: /etc/exports
-  
-  - name: Configure /etc/exports
-    shell: exportfs -a
-  
-  - name: Installing NFS cliant
-    apt:
-      name: nfs-common
-      state: latest
-  
-  - name: Make NFS directory
-    file:
-      path: /opt/example
-      state: directory
-
-  - name: Mounting NFS directory
-    command: mount ldap01.example.com:/home /opt/example

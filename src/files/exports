@@ -1,1 +1,1 @@
-/home    *.hostname.com(rw,sync,no_subtree_check)
+/home   133.15.45.0/255.255.255.128(rw,sync,no_subtree_check)
