@@ -22,7 +22,7 @@ if [ ! -e ${HOME}/.ssh/id_rsa || ! -e ${HOME}/.ssh/id_rsa.pub ]; then
 fi
 
 # Change your node's account
-USR="saito"
+USR="taiki"
 # Change your node's IP
 ## hack11
 func 133.15.45.42

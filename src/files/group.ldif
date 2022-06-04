@@ -1,0 +1,18 @@
+#  group.ldif
+dn: cn=system01,ou=Group,dc=example,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: system01
+gidNumber: 1001
+
+dn: cn=system02,ou=Group,dc=example,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: system02
+gidNumber: 1002
+
+dn: cn=system03,ou=Group,dc=example,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: system03
+gidNumber: 1003

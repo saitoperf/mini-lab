@@ -1,0 +1,98 @@
+- hosts: hack12
+  gather_facts: yes
+  vars:
+    ldap_password: pass
+  
+  tasks:
+    - name: Installing pip
+      apt:
+        name: python3-pip
+        state: latest
+    
+    - name: Installing pexpect
+      pip:
+        name: pexpect
+        state: latest
+
+    - name: Installing ldap
+      apt:
+        name: 
+          - slapd
+          - ldap-utils
+      environment:
+        DEBIAN_FRONTEND: noninteractive
+
+    - name: Setting auto-response
+      shell: echo "slapd slapd/no_configuration boolean false" | debconf-set-selections &&  echo "slapd slapd/domain string example.com" | debconf-set-selections && echo "slapd shared/organization string 'admin'" | debconf-set-selections && echo "slapd slapd/password1 password pass" | debconf-set-selections && echo "slapd slapd/password2 password pass" | debconf-set-selections && echo "slapd slapd/purge_database boolean true" | debconf-set-selections && echo "slapd slapd/move_old_database boolean true" | debconf-set-selections 
+    
+    - name: dpkg-reconfigure slapd
+      shell: dpkg-reconfigure -f noninteractive slapd
+      environment:
+        DEBIAN_FRONTEND: noninteractive
+    
+    - name: Edit /etc/ldap/ldap.conf
+      copy:
+        src: ldap.conf
+        dest: /etc/ldap/ldap.conf
+    
+    - name: Edit /etc/hosts
+      copy:
+        src: hosts
+        dest: /etc/hosts
+    
+    - name: Edit ldfi folder
+      file:
+        path: ldfi
+        state: directory
+    
+    - name: Copy ldfi files
+      copy: 
+        src: "{{item}}"
+        dest: ldfi
+      with_fileglob:
+        - "*.ldif"
+    
+    - name: Register initial LDAP entries
+      expect:
+        command: ldapadd -x -D cn=admin,dc=example,dc=com -W -f ldfi/init.ldif
+        responses:
+          "Enter LDAP Password:" : "{{ldap_password}}"
+
+    - name: Register group account
+      expect:
+        command: ldapadd -x -D cn=admin,dc=example,dc=com -W -f ldfi/group.ldif
+        responses:
+          "Enter LDAP Password:" : "{{ldap_password}}"
+    
+    - name: Register user account
+      expect:
+        command: ldapadd -x -D cn=admin,dc=example,dc=com -W -f ldfi/user.ldif
+        responses:
+          "Enter LDAP Password:" : "{{ldap_password}}"
+    
+    - name: Installing SSSD
+      apt:
+        name: 
+          - sssd-ldap
+          - ldap-utils
+        state: latest
+
+    - name: Init sssd.conf
+      copy:
+        src: sssd.conf
+        dest: /etc/sssd
+    
+    - name: Authorization to sssd.conf
+      file:
+        path: /etc/sssd/sssd.conf
+        mode: '0600'
+
+    - name: Starting SSSD
+      service:
+        name: sssd
+        state: started
+        enabled: yes
+    
+    - name: Automatically create home directory
+      command: pam-auth-update --enable mkhomedir
+
