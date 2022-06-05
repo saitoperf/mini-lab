@@ -115,3 +115,27 @@ kubeadm config images pull
 ```
 kubeadm join 192.168.122.12:6443 --token 30vi9l.iu7bna26azxv64z9 \
   --discovery-token-ca-cert-hash sha256:80ea56ac5fe063e1afabca56ba55d18c08b76c637c884ee279486a4382760b4f
+
+## block構文のメモ
+```yml
+  - name: kubeadm init
+    block: 
+    - name: kubeadm reset -f
+      shell: kubeadm reset -f
+    - name: restart docker
+      service:
+        name: docker
+        state: restarted
+    - name: 
+      shell: kubeadm init --config kubeadm-config.yaml
+    rescue:
+    - name: kubeadm reset -f
+      shell: kubeadm reset -f
+    - name: restart docker
+      service:
+        name: docker
+        state: restarted
+    - name:
+      command: /bin/false
+
+```

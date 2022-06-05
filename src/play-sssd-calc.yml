@@ -17,7 +17,7 @@
 
   # 設定ファイルの適用
   - name: add hots
-    shell: echo 133.15.45.43 ldap01.example.com >> /etc/hosts
+    shell: echo {{ serverip }} ldap01.example.com >> /etc/hosts
   - name: configure sssd
     copy:
       src: sssd/sssd.conf

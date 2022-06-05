@@ -4,6 +4,7 @@
   remote_user: "{{ user }}"
   vars_files:
   - vars.yml
+  - vars-k8s.yml
 
   tasks:
   - name:
@@ -49,4 +50,4 @@
       state: latest
 
   - name: join cluster
-    shell: kubeadm join 192.168.122.12:6443 --token *** --discovery-token-ca-cert-hash sha256:***
+    shell: kubeadm join 192.168.122.12:6443 --token {{ token }} --discovery-token-ca-cert-hash sha256:{{ hash }}

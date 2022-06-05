@@ -1,0 +1,36 @@
+---
+- hosts: master
+  gather_facts: true
+  remote_user: "{{ user }}"
+  vars_files:
+  - vars.yml
+
+  tasks:
+  - name: install git
+    apt:
+      name: git
+      state: latest
+  - name: git clone prometheus
+    shell: git clone https://github.com/prometheus-operator/kube-prometheus.git
+    ignore_errors: true
+  # - name: git clone prometheus
+  #   git:
+  #     repo: https://github.com/prometheus-operator/kube-prometheus.git
+  #     dest: /home/{{ user }}/
+  - name: kubectl apply manifests/setup
+    shell: kubectl apply --server-side -f kube-prometheus/manifests/setup
+    become: true
+    become_user: "{{ user }}"
+  - name: kubectl apply manifests/
+    shell: kubectl apply -f kube-prometheus/manifests/
+    become: true
+    become_user: "{{ user }}"
+  # ポート開放
+  - name:
+    shell: "nohup kubectl port-forward --address {{ masterip }} --namespace monitoring svc/prometheus-k8s 9090 &"
+    become: true
+    become_user: "{{ user }}"
+  - name:
+    shell: "nohup kubectl port-forward --address {{ masterip }} --namespace monitoring svc/grafana 3000 &"
+    become: true
+    become_user: "{{ user }}"
