@@ -27,3 +27,6 @@
 
   - name: export file-system
     command: exportfs -a
+  
+  # - name: login user01
+  #   command: su user01 -w user01

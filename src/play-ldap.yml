@@ -34,7 +34,7 @@
     - "ldap/*.ldif"
 
   # 設定を更新
-  - name: add hots
+  - name: add hosts
     shell: echo {{ serverip }} ldap01.example.com >> /etc/hosts
   - name: ldapadd init
     command: ldapadd -x -D cn=admin,dc=example,dc=com -w pass -f init.ldif
