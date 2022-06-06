@@ -29,7 +29,7 @@
       - curl
       state: latest
 
-  - name: usermod -aG docker {{user}}
+  - name: add docker group to user
     shell: usermod -aG docker {{ user }}
 
   - name:
