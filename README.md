@@ -1,15 +1,12 @@
 # mini-lab
-ローカルのマシンに仮想の研究室サーバクラスタを構築します。<br>
-4 ノードでクラスタを構築します。<br>
-各ノードは物理マシンでも，仮想マシンでも可能
-
+- 2022年6月5日 技育CAMP vol.3 発表作品
+    - Ansibleによるインフラ自動構築ツール
+    - [Googleスライド](https://docs.google.com/presentation/d/1Upm43bbv-G7Y8s6EBTPklq36OWrPCfxlfI7wg0UWxro/edit?usp=sharing)
 
 ## リポジトリ構成
 - src
     - ソースコード置き場
     - 主にansible
-- memo
-    - サーバ構築のメモ
 - plan.md
     - 作業計画
 - install.sh
