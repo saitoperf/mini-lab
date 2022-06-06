@@ -7,8 +7,10 @@
 - src
     - ソースコード置き場
     - 主にansible
-- install.sh
+- src/install.sh
     - インストーラ
+- ssh.sh
+    - 公開鍵をターゲットノードに配置するスクリプト
 
 ## 仕様書
 ### サーバ
@@ -73,6 +75,6 @@ sudo ln -s /usr/bin/python3 /usr/bin/python
 
 ```sh
 git clone https://github.com/saitoperf/virt-lab.git
-cd virt-lab
+cd virt-lab/src
 ./install.sh
 ```
