@@ -7,8 +7,6 @@
 - src
     - ソースコード置き場
     - 主にansible
-- plan.md
-    - 作業計画
 - install.sh
     - インストーラ
 

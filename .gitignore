@@ -1,2 +1,4 @@
 memo/
 plan.md
+src/files/tls/mycacert.crt
+src/vars-k8s.yml
