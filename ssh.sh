@@ -24,9 +24,14 @@ fi
 # Change your node's account
 USR="saito"
 # Change your node's IP
+
+# hack11
+# func 133.15.45.42
+
+
 ## hack11
-func 133.15.45.42
+# func 133.15.45.42
 ## hack21
-func 133.15.45.45
+# func 133.15.45.45
 ## hack21
-func 133.15.45.46
+# func 133.15.45.46

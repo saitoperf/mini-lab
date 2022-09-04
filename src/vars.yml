@@ -1,3 +1,5 @@
-#user: saito
-user: taiki
-serverip: 133.15.45.43
+user: saito
+serverip: 192.168.122.15
+
+# user: taiki
+# serverip: 133.15.45.43
